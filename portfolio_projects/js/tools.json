@@ -255,5 +255,17 @@
   "name": "Text-Based Adventure Game",
   "description": "A classic choose-your-own-adventure game driven by text and choices.",
   "tags": ["game", "fun", "story", "adventure", "text"], "category": "Games"
+ },
+ {
+  "id": "whac-a-mole",
+  "name": "Whac-A-Mole",
+  "description": "A classic arcade game to test your reaction speed.",
+  "tags": ["game", "fun", "arcade", "reaction"], "category": "Games"
+ },
+ {
+  "id": "minesweeper",
+  "name": "Minesweeper",
+  "description": "The classic logic puzzle game of clearing a board without hitting any mines.",
+  "tags": ["game", "fun", "logic", "puzzle", "classic"], "category": "Games"
  }
 ]
