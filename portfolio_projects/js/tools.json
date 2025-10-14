@@ -267,5 +267,17 @@
   "name": "Minesweeper",
   "description": "The classic logic puzzle game of clearing a board without hitting any mines.",
   "tags": ["game", "fun", "logic", "puzzle", "classic"], "category": "Games"
+ },
+ {
+  "id": "magic-8-ball",
+  "name": "Magic 8-Ball",
+  "description": "Ask a yes/no question and get a mysterious answer from the classic toy.",
+  "tags": ["fun", "game", "random", "creative"], "category": "Fun & Creative"
+ },
+ {
+  "id": "would-you-rather",
+  "name": "Would You Rather",
+  "description": "A simple game that presents you with two difficult choices.",
+  "tags": ["fun", "game", "dilemma", "creative"], "category": "Fun & Creative"
  }
 ]
