@@ -219,5 +219,11 @@
   "name": "Digital Business Card Generator",
   "description": "Create a downloadable image of your digital business card.",
   "tags": ["card", "generator", "image", "contact", "utility"], "category": "Productivity & Organization"
+ },
+ {
+  "id": "interactive-story-builder",
+  "name": "Interactive Story Builder",
+  "description": "Create your own choose-your-own-adventure stories with branching paths.",
+  "tags": ["story", "writing", "creative", "game", "utility"], "category": "Fun & Creative"
  }
 ]

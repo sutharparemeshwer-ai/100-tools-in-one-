@@ -1448,3 +1448,9 @@ a {
 .theme-container.light-mode p { color: #495057; }
 .theme-container.light-mode .btn { background-color: #0d6efd; color: #fff; }
 .theme-container.light-mode a { color: #0d6efd; }
+
+/* --- Interactive Story Builder --- */
+.list-group-item.active {
+    background-color: #56caad;
+    border-color: #56caad;
+}
