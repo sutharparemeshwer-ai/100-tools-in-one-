@@ -1,0 +1,18 @@
+<!-- tools/data-visualization-dashboard.html -->
+<div class="container-fluid mt-4">
+    <h4 class="mb-4 text-center text-light"><i class="fa-solid fa-chart-line me-2"></i> Data Visualization Dashboard</h4>
+
+    <div class="card p-3">
+        <div id="chart-controls" class="d-flex justify-content-center flex-wrap gap-2 mb-3 border-bottom pb-3">
+            <button class="btn btn-sm btn-primary" data-chart-type="bar">Bar Chart</button>
+            <button class="btn btn-sm btn-secondary" data-chart-type="line">Line Chart</button>
+            <button class="btn btn-sm btn-secondary" data-chart-type="pie">Pie Chart</button>
+            <button class="btn btn-sm btn-secondary" data-chart-type="doughnut">Doughnut Chart</button>
+            <button class="btn btn-sm btn-secondary" data-chart-type="polarArea">Polar Area</button>
+            <button class="btn btn-sm btn-secondary" data-chart-type="radar">Radar Chart</button>
+        </div>
+        <div style="max-width: 1200px; min-height: 500px; margin: auto; position: relative;">
+            <canvas id="data-vis-chart"></canvas>
+        </div>
+    </div>
+</div>

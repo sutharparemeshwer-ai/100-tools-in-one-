@@ -1,0 +1,45 @@
+<!-- tools/animated-weather-dashboard.html -->
+<div id="weather-container" class="weather-container">
+    <div class="card weather-card mx-auto p-4">
+        <h4 class="mb-4 text-center"><i class="fa-solid fa-wind me-2"></i> Animated Weather</h4>
+
+        <!-- Search -->
+        <div class="input-group mb-3">
+            <input type="text" id="weather-city-input" class="form-control" placeholder="Enter city name...">
+            <button class="btn btn-primary" type="button" id="weather-search-btn"><i class="fa-solid fa-search"></i></button>
+        </div>
+        <div class="text-center mb-3">
+            <button class="btn btn-secondary btn-sm" id="weather-location-btn">
+                <i class="fa-solid fa-location-crosshairs me-2"></i> Use My Location
+            </button>
+        </div>
+
+        <!-- Status -->
+        <div id="weather-status-new" class="text-center my-3"></div>
+
+        <!-- Display -->
+        <div id="weather-display-new" class="d-none text-center">
+            <div id="weather-icon-container" class="mb-3">
+                <!-- Animated icon will go here -->
+            </div>
+            <h1 id="weather-temp" class="display-3 fw-bold">--°C</h1>
+            <p id="weather-desc" class="lead text-capitalize">--</p>
+            <p id="weather-city" class="h5">--, --</p>
+            <hr class="my-4">
+            <div class="row text-center">
+                <div class="col-4">
+                    <p class="mb-0 fw-bold" id="weather-feels-like">--°C</p>
+                    <p class="small ">Feels Like</p>
+                </div>
+                <div class="col-4">
+                    <p class="mb-0 fw-bold" id="weather-humidity">--%</p>
+                    <p class="small ">Humidity</p>
+                </div>
+                <div class="col-4">
+                    <p class="mb-0 fw-bold" id="weather-wind-speed">-- m/s</p>
+                    <p class="small ">Wind</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
