@@ -237,5 +237,17 @@
   "name": "Stock Portfolio Tracker",
   "description": "Track your stock portfolio with real-time price data from Finnhub.",
   "tags": ["stock", "portfolio", "finance", "tracker", "api"], "category": "Finance & Calculators"
+ },
+ {
+  "id": "personal-finance-dashboard",
+  "name": "Personal Finance Dashboard",
+  "description": "A dashboard to track your assets, liabilities, and net worth.",
+  "tags": ["finance", "dashboard", "net worth", "assets", "liabilities"], "category": "Finance & Calculators"
+ },
+ {
+  "id": "virtual-whiteboard",
+  "name": "Virtual Whiteboard",
+  "description": "A simple drawing board to sketch ideas, with color, size, and eraser tools.",
+  "tags": ["drawing", "canvas", "whiteboard", "creative", "utility"], "category": "Fun & Creative"
  }
 ]
