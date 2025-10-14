@@ -231,5 +231,11 @@
   "name": "Emoji Keyboard",
   "description": "Search and copy emojis to your clipboard with this handy keyboard.",
   "tags": ["emoji", "keyboard", "utility", "fun", "copy"], "category": "Fun & Creative"
+ },
+ {
+  "id": "stock-portfolio-tracker",
+  "name": "Stock Portfolio Tracker",
+  "description": "Track your stock portfolio with real-time price data from Finnhub.",
+  "tags": ["stock", "portfolio", "finance", "tracker", "api"], "category": "Finance & Calculators"
  }
 ]
