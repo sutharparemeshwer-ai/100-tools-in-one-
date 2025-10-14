@@ -671,8 +671,8 @@ a {
 .search-btn {
     background-color: #f8f9fa;
     border: 1px solid #f8f9fa;
-    border-radius: 4px; 
-    color: #3c4043; 
+    border-radius: 4px;
+    color: #3c4043;
     font-size: 14px;
     padding: 10px 16px;
     margin: 11px 4px;
@@ -860,7 +860,7 @@ a {
 
 .white {
     background-color: #4a4f4e;
-    color: #333;
+    color: #fff;
     border-color: #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
@@ -1039,7 +1039,7 @@ a {
 }
 .word-input {
   display: flex;
-  color: #344354;
+  color: #fff;
   border: 1px solid #edf1f4;
 }
 .refresh {
@@ -1066,8 +1066,8 @@ a {
   outline: none;
   background-color: #e6eaed;
   font-size: 25px;
-  font-weight: bold;
-  color: #344354;
+  font-weight: bold; 
+  color: #344354; 
 }
 .count-down {
   flex: 1;
@@ -1453,4 +1453,25 @@ a {
 .list-group-item.active {
     background-color: #56caad;
     border-color: #56caad;
+}
+
+/* --- Emoji Keyboard --- */
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.emoji-btn {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+.emoji-btn:hover {
+    background-color: rgba(86, 202, 173, 0.2);
 }

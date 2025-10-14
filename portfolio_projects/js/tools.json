@@ -225,5 +225,11 @@
   "name": "Interactive Story Builder",
   "description": "Create your own choose-your-own-adventure stories with branching paths.",
   "tags": ["story", "writing", "creative", "game", "utility"], "category": "Fun & Creative"
+ },
+ {
+  "id": "emoji-keyboard",
+  "name": "Emoji Keyboard",
+  "description": "Search and copy emojis to your clipboard with this handy keyboard.",
+  "tags": ["emoji", "keyboard", "utility", "fun", "copy"], "category": "Fun & Creative"
  }
 ]
