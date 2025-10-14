@@ -303,5 +303,17 @@
   "name": "Countdown to New Year",
   "description": "A live countdown timer to the next New Year's Day.",
   "tags": ["time", "countdown", "event", "fun"], "category": "Productivity & Organization"
+ },
+ {
+  "id": "connect-four",
+  "name": "Connect Four",
+  "description": "The classic two-player game of getting four tokens in a row.",
+  "tags": ["game", "fun", "classic", "strategy", "multiplayer"], "category": "Games"
+ },
+ {
+  "id": "dad-joke-generator",
+  "name": "Dad Joke Generator",
+  "description": "Fetches a random, cringeworthy dad joke from an API.",
+  "tags": ["fun", "joke", "generator", "api", "creative"], "category": "Fun & Creative"
  }
 ]
