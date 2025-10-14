@@ -2,6 +2,25 @@
 <div class="container-fluid mt-4">
     <h4 class="mb-4 text-center text-light"><i class="fa-solid fa-chart-line me-2"></i> Data Visualization Dashboard</h4>
 
+    <!-- Data Input Section -->
+    <div class="card p-3 mb-4">
+        <h5 class="mb-3">Enter Your Data</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="chart-labels-input" class="form-label">Labels (comma-separated)</label>
+                <textarea id="chart-labels-input" class="form-control" rows="2" placeholder="e.g., January, February, March"></textarea>
+            </div>
+            <div class="col-md-6">
+                <label for="chart-data-input" class="form-label">Data Values (comma-separated)</label>
+                <textarea id="chart-data-input" class="form-control" rows="2" placeholder="e.g., 10, 25, 15"></textarea>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+            <small id="data-error-msg" class="text-danger me-3"></small>
+            <button id="update-data-btn" class="btn btn-success">Update Chart with My Data</button>
+        </div>
+    </div>
+
     <div class="card p-3">
         <div id="chart-controls" class="d-flex justify-content-center flex-wrap gap-2 mb-3 border-bottom pb-3">
             <button class="btn btn-sm btn-primary" data-chart-type="bar">Bar Chart</button>

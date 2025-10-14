@@ -2,11 +2,13 @@
 
 let chartInstance = null;
 let chartControls = null;
+let labelsInput, dataInput, updateDataBtn, dataErrorMsg;
+let currentChartData = null; // To store the data being used
 
 const CHART_JS_CDN = 'https://cdn.jsdelivr.net/npm/chart.js';
 
 // Sample data for the charts
-const sampleData = {
+const defaultSampleData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [{
         label: 'Monthly Sales (in thousands)',
@@ -53,9 +55,9 @@ function loadScript(url) {
     });
 }
 
-function createChart(type = 'bar') {
+function createChart(type = 'bar', data) {
     const ctx = document.getElementById('data-vis-chart')?.getContext('2d');
-    if (!ctx) return;
+    if (!ctx || !data) return;
 
     if (chartInstance) {
         chartInstance.destroy();
@@ -63,7 +65,7 @@ function createChart(type = 'bar') {
 
     chartInstance = new Chart(ctx, {
         type: type,
-        data: sampleData,
+        data: data,
         options: {
             responsive: true,
             maintainAspectRatio: false, // Allow chart to fill container height
@@ -102,6 +104,46 @@ function createChart(type = 'bar') {
     });
 }
 
+function parseAndValidateData() {
+    dataErrorMsg.textContent = '';
+    const labels = labelsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    const dataPoints = dataInput.value.split(',').map(s => parseFloat(s.trim()));
+
+    if (labels.length === 0 || dataPoints.length === 0) {
+        dataErrorMsg.textContent = 'Please enter both labels and data.';
+        return null;
+    }
+
+    if (labels.length !== dataPoints.length) {
+        dataErrorMsg.textContent = 'The number of labels must match the number of data points.';
+        return null;
+    }
+
+    if (dataPoints.some(isNaN)) {
+        dataErrorMsg.textContent = 'All data values must be valid numbers.';
+        return null;
+    }
+
+    // Return a new data object in the correct format
+    return {
+        labels: labels,
+        datasets: [{
+            ...defaultSampleData.datasets[0], // Inherit styling from default
+            label: 'Custom Data',
+            data: dataPoints,
+        }]
+    };
+}
+
+function handleDataUpdate() {
+    const newData = parseAndValidateData();
+    if (newData) {
+        currentChartData = newData;
+        const activeChartType = chartControls.querySelector('.btn-primary')?.dataset.chartType || 'bar';
+        createChart(activeChartType, currentChartData);
+    }
+}
+
 function handleControlClick(event) {
     const button = event.target.closest('button');
     if (!button || !button.dataset.chartType) return;
@@ -114,18 +156,34 @@ function handleControlClick(event) {
     button.classList.remove('btn-secondary');
     button.classList.add('btn-primary');
 
-    createChart(button.dataset.chartType);
+    createChart(button.dataset.chartType, currentChartData);
 }
 
 export async function init() {
     await loadScript(CHART_JS_CDN);
+
+    // Get DOM elements
     chartControls = document.getElementById('chart-controls');
+    labelsInput = document.getElementById('chart-labels-input');
+    dataInput = document.getElementById('chart-data-input');
+    updateDataBtn = document.getElementById('update-data-btn');
+    dataErrorMsg = document.getElementById('data-error-msg');
+
+    // Set initial state
+    currentChartData = defaultSampleData;
+    labelsInput.value = currentChartData.labels.join(', ');
+    dataInput.value = currentChartData.datasets[0].data.join(', ');
+
+    // Add listeners
     chartControls?.addEventListener('click', handleControlClick);
-    createChart('bar'); // Create the default bar chart
+    updateDataBtn?.addEventListener('click', handleDataUpdate);
+
+    createChart('bar', currentChartData); // Create the default bar chart
 }
 
 export function cleanup() {
     chartControls?.removeEventListener('click', handleControlClick);
+    updateDataBtn?.removeEventListener('click', handleDataUpdate);
     if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
