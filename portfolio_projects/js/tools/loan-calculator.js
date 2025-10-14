@@ -1,8 +1,7 @@
 // js/tools/loan-calculator.js
 
 let form, amountInput, rateInput, termInput;
-let monthlyPaymentEl, totalPrincipalEl, totalInterestEl, totalPaymentEl;
-
+let monthlyPaymentEl, totalPrincipalEl, totalInterestEl, totalPaymentEl
 function formatCurrency(value) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 }
@@ -37,6 +36,32 @@ function calculateLoan(e) {
     totalPrincipalEl.textContent = formatCurrency(P);
     totalInterestEl.textContent = formatCurrency(totalInterest);
     totalPaymentEl.textContent = formatCurrency(totalPayment);
+
+    generateAmortizationSchedule(P, monthlyRate, n, monthlyPayment);
+}
+
+function generateAmortizationSchedule(principal, monthlyRate, numberOfPayments, monthlyPayment) {
+    amortizationTbody.innerHTML = ''; // Clear previous schedule
+    let remainingBalance = principal;
+
+    for (let i = 1; i <= numberOfPayments; i++) {
+        const interestForMonth = remainingBalance * monthlyRate;
+        const principalForMonth = monthlyPayment - interestForMonth;
+        remainingBalance -= principalForMonth;
+
+        // To prevent negative balance at the end due to rounding
+        if (remainingBalance < 0) remainingBalance = 0;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${i}</td>
+            <td>${formatCurrency(monthlyPayment)}</td>
+            <td>${formatCurrency(principalForMonth)}</td>
+            <td>${formatCurrency(interestForMonth)}</td>
+            <td>${formatCurrency(remainingBalance)}</td>
+        `;
+        amortizationTbody.appendChild(row);
+    }
 }
 
 export function init() {
@@ -48,6 +73,7 @@ export function init() {
     totalPrincipalEl = document.getElementById('total-principal');
     totalInterestEl = document.getElementById('total-interest');
     totalPaymentEl = document.getElementById('total-payment');
+    amortizationTbody = document.getElementById('amortization-tbody');
 
     form.addEventListener('submit', calculateLoan);
 
