@@ -249,5 +249,11 @@
   "name": "Virtual Whiteboard",
   "description": "A simple drawing board to sketch ideas, with color, size, and eraser tools.",
   "tags": ["drawing", "canvas", "whiteboard", "creative", "utility"], "category": "Fun & Creative"
+ },
+ {
+  "id": "text-based-adventure-game",
+  "name": "Text-Based Adventure Game",
+  "description": "A classic choose-your-own-adventure game driven by text and choices.",
+  "tags": ["game", "fun", "story", "adventure", "text"], "category": "Games"
  }
 ]
