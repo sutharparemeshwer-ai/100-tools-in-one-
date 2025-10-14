@@ -279,5 +279,29 @@
   "name": "Would You Rather",
   "description": "A simple game that presents you with two difficult choices.",
   "tags": ["fun", "game", "dilemma", "creative"], "category": "Fun & Creative"
+ },
+ {
+  "id": "loan-calculator",
+  "name": "Loan Calculator",
+  "description": "Calculate monthly payments for a loan based on amount, rate, and term.",
+  "tags": ["finance", "calculator", "loan", "math"], "category": "Finance & Calculators"
+ },
+ {
+  "id": "dice-roller",
+  "name": "Dice Roller",
+  "description": "A simple tool to roll one or more virtual dice.",
+  "tags": ["fun", "game", "random", "utility"], "category": "Fun & Creative"
+ },
+ {
+  "id": "morse-code-translator",
+  "name": "Morse Code Translator",
+  "description": "Translate text to and from Morse code in real-time.",
+  "tags": ["text", "translator", "morse", "utility"], "category": "Text & Content"
+ },
+ {
+  "id": "countdown-to-new-year",
+  "name": "Countdown to New Year",
+  "description": "A live countdown timer to the next New Year's Day.",
+  "tags": ["time", "countdown", "event", "fun"], "category": "Productivity & Organization"
  }
 ]
