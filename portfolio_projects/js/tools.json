@@ -338,6 +338,14 @@
     "category": "Games",
     "tags": ["game", "puzzle", "maze", "logic", "keyboard"]
 }
+,
+{
+    "id": "2048-game",
+    "name": "2048 Game",
+    "description": "The classic sliding puzzle game. Use arrow keys to merge tiles and reach 2048.",
+    "category": "Games",
+    "tags": ["game", "puzzle", "logic", "math", "keyboard"]
+}
 
 
 
