@@ -70,18 +70,21 @@ function buildCategorizedView(toolList, parentId) {
     // Generate HTML based on the view type (sidebar or home)
     if (parentId.includes('sidebar')) { // Sidebar Accordion View
         parentEl.innerHTML = sortedCategories.map((category, index) => {
-            const categoryId = `category-${parentId}-${index}`;
-            const linksHtml = groupedTools[category].map(t => `<a class="list-group-item list-group-item-action" href="#${t.id}">${t.name}</a>`).join('');
+            const iconClass = CATEGORY_ICONS[category] || 'fa-solid fa-star';
+            const linksHtml = groupedTools[category].map(t => `
+                <li class="nav-item">
+                    <a href="#${t.id}" class="nav-link">
+                        <span class="nav-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                        <span class="nav-text">${t.name}</span>
+                    </a>
+                </li>`).join('');
             return `
-                <div class="accordion-item mytool">
-                    <h2 class="accordion-header" id="heading-${categoryId}">
-                        <button class="accordion-button collapsed mytool" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${categoryId}" aria-expanded="false" aria-controls="collapse-${categoryId}">
-                            ${category}
-                        </button>
-                    </h2>
-                    <div id="collapse-${categoryId}" class="accordion-collapse collapse" aria-labelledby="heading-${categoryId}" data-bs-parent="#${parentId}">
-                        <div class="list-group list-group-flush">${linksHtml}</div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-header" data-bs-toggle="collapse" data-bs-target="#sidebar-cat-${index}">
+                        <h6 class="sidebar-section-title">${category}</h6>
+                        <i class="fa-solid fa-chevron-down category-chevron"></i>
                     </div>
+                    <ul class="nav-list collapse" id="sidebar-cat-${index}">${linksHtml}</ul>
                 </div>`;
         }).join('');
     } else { // Home Page Card View
@@ -98,16 +101,60 @@ function buildCategorizedView(toolList, parentId) {
                         </div>
                     </div>
                 </div>`).join('');
-            return `<div class="row mb-4"><div class="col-12"><h4 class="category-header"><i class="${iconClass} me-2"></i>${category}</h4></div>${cardsHtml}</div>`;
+            // Create a safe ID for the anchor link
+            const categoryId = `category-${category.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
+            return `<div class="row mb-4" id="${categoryId}"><div class="col-12"><h4 class="category-header"><i class="${iconClass} me-2"></i>${category}</h4></div>${cardsHtml}</div>`;
         }).join('');
     }
 }
 
+/**
+ * Builds the category grid for the homepage.
+ */
+function buildCategoryGrid() {
+    const grid = document.getElementById('core-categories-grid');
+    if (!grid) return;
+
+    const categories = [...new Set(toolsList.map(t => t.category || 'Uncategorized'))].sort();
+    
+    const createCard = (category) => {
+        const iconClass = CATEGORY_ICONS[category] || 'fa-solid fa-star';
+        const categoryId = `category-${category.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
+        return `
+            <div class="col">
+                <a href="#${categoryId}" class="core-tool-card h-100">${category}</a>
+            </div>`;
+    };
+
+    grid.innerHTML = categories.map(createCard).join('');
+}
+
+/**
+ * Adds smooth scrolling to the category slider links and prevents router interference.
+ */
+function setupCategorySliderLinks() {
+    const grid = document.getElementById('core-categories-grid');
+    if (!grid) return;
+
+    grid.addEventListener('click', (e) => {
+        const link = e.target.closest('a.core-tool-card');
+        if (!link) return;
+
+        e.preventDefault(); // Stop the browser from changing the hash immediately
+
+        const targetId = link.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            // Manually scroll to the element smoothly
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+}
+
 /* build nav and home/sidebar */
 function buildNavAndHome() {
-    buildCategorizedView(toolsList, 'tools-sidebar-list');
-    buildCategorizedView(toolsList, 'tools-desktop-sidebar');
-    buildCategorizedView(toolsList, 'home-list');
+    buildCategorizedView(toolsList, 'home-list'); // Only build the home page list
 }
 
 /* load tool html + optional module */
@@ -124,24 +171,93 @@ async function loadTool(name) {
   // if no name -> show home (optional)
   if (!name) {
     app.innerHTML = `
-      <div class="mb-3 text-center mt-5 mb-5">
-        <h3>Welcome — pick a tool</h3>
-        <p>Use the sidebar or search to open a tool.</p>
+      <div class="hero-section">
+        <div class="hero-content">
+          <h1 class="hero-title">A Suite of Powerful Web Tools</h1>
+          <p class="hero-subtitle">Discover ${toolsList.length} meticulously crafted utilities, games, and generators, all in one place.</p>
+          <a href="#all-tools" class="btn hero-cta-btn">Explore Now</a>
+        </div>
+        <div class="hero-background-animation"></div>
       </div>
-      <div id="home-list" class="row"></div>
+
+      <!-- "Our Core Tools" Section -->
+      <div class="core-tools-container">
+        <div class="container">
+            <h1 class="text-center mb-5">Explore by Category</h1>
+            <div id="core-categories-grid" class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center"></div>
+        </div>
+      </div>
+
+      <!-- "We deal with" Section -->
+      <div class="tool-slider-container-fluid">
+          <h1 class="text-center mb-5">We deal with</h1>
+          <div class="scrolling-wrapper">
+              <div class="scrolling-track">
+                  <!-- Cards are duplicated for seamless looping -->
+                  <a href="#" class="tool-card"><i class="fa-solid fa-brain"></i> AI Analytics</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-cloud"></i> Cloud Storage</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-shield-halved"></i> Data Security</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-users"></i> CRM Integration</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-code-branch"></i> API Management</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-chart-line"></i> Business Intel</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-cubes"></i> DevOps</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-mobile-screen-button"></i> Mobile Solutions</a>
+                  <!-- Duplicate Set -->
+                  <a href="#" class="tool-card"><i class="fa-solid fa-brain"></i> AI Analytics</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-cloud"></i> Cloud Storage</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-shield-halved"></i> Data Security</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-users"></i> CRM Integration</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-code-branch"></i> API Management</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-chart-line"></i> Business Intel</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-cubes"></i> DevOps</a>
+                  <a href="#" class="tool-card"><i class="fa-solid fa-mobile-screen-button"></i> Mobile Solutions</a>
+              </div>
+          </div>
+      </div>
+      
+      <!-- End "We deal with" Section -->
+      
+      <div class="container mt-5">
+        <div id="home-list" class="row">
+        
+        </div>
+      </div>
+      <br>
     `;
     buildNavAndHome();
+    buildCategoryGrid();
+    setupCategorySliderLinks();
     return;
+  }
+
+  // Handle the dedicated "All Tools" page
+  if (name === 'all-tools') {
+      try {
+          const res = await fetch(`${TOOLS_HTML_PATH}/all-tools.html`);
+          if (!res.ok) throw new Error('all-tools.html not found');
+          app.innerHTML = await res.text();
+          buildAllToolsGrid(toolsList); // Populate the grid
+          setupAllToolsSearch(); // Activate the search bar
+      } catch (err) {
+          console.error('Error loading all-tools page:', err);
+          app.innerHTML = `<div class="alert alert-danger">Could not load the tool suite page.</div>`;
+      }
+      return;
   }
 
   // fetch HTML fragment for tool
   try {
     const res = await fetch(`${TOOLS_HTML_PATH}/${name}.html`);
-    if (!res.ok) throw new Error('Tool HTML not found');
+    if (!res.ok) throw new Error(`Tool HTML not found for "${name}"`);
     const html = await res.text();
-    app.innerHTML = html;
+    // Wrap tool content in a standard container for consistent layout
+    app.innerHTML = `
+      <div class="container">
+        ${html}
+      </div>
+    `;
   } catch (err) {
-    console.error(err);
+    console.error(`Error loading tool ${name}:`, err);
     app.innerHTML = `<div class="alert alert-danger">Tool "${name}" not found.</div>`;
     return;
   }
@@ -171,10 +287,67 @@ function setupSearch() {
     );
     
     // Re-build the categorized views with the filtered list
-    buildCategorizedView(filtered, 'tools-sidebar-list');
-    buildCategorizedView(filtered, 'tools-desktop-sidebar');
-    buildCategorizedView(filtered, 'home-list');
+    buildCategorizedView(filtered, 'home-list'); // Only need to update the home list now
   });
+}
+
+/* theme switcher logic */
+function setupThemeToggle() {
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+
+    const applyTheme = (theme) => {
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.body.classList.remove('light-theme');
+            toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    };
+
+    applyTheme(currentTheme);
+
+    toggleBtn.addEventListener('click', () => {
+        let newTheme = 'dark';
+        if (!document.body.classList.contains('light-theme')) {
+            newTheme = 'light';
+        }
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
+
+    // Also add a button for the mobile search toggle area
+    const mobileToggle = document.createElement('button');
+    mobileToggle.id = 'theme-toggle-btn-mobile';
+    mobileToggle.className = 'btn btn-outline-secondary ms-2 d-lg-none';
+    mobileToggle.innerHTML = toggleBtn.innerHTML;
+    mobileToggle.addEventListener('click', () => toggleBtn.click());
+    document.querySelector('.navbar-toggler').insertAdjacentElement('beforebegin', mobileToggle);
+}
+
+/* "Back to Top" button logic */
+function setupBackToTopButton() {
+    const backToTopBtn = document.getElementById('back-to-top-btn');
+    if (!backToTopBtn) return;
+
+    // Show or hide the button based on scroll position
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) { // Show button after scrolling 300px
+            backToTopBtn.style.display = 'flex';
+        } else {
+            backToTopBtn.style.display = 'none';
+        }
+    });
+
+    // Scroll to top on click
+    backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Smooth scrolling animation
+        });
+    });
 }
 
 /* start the app */
@@ -184,22 +357,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadToolsList();
   buildNavAndHome();
   setupSearch();
-
-  // Setup mobile sidebar collapse listener
-  const sidebarList = document.getElementById('tools-sidebar-list');
-  if (sidebarList) {
-    sidebarList.addEventListener('click', (e) => {
-      // Check if the clicked element is a link
-      if (e.target.tagName === 'A') {
-        const offcanvasEl = document.getElementById('toolsOffcanvas');
-        // Use Bootstrap's native JS to hide the Offcanvas
-        if (offcanvasEl && typeof bootstrap !== 'undefined' && bootstrap.Offcanvas) {
-            const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl) || new bootstrap.Offcanvas(offcanvasEl);
-            bsOffcanvas.hide();
-        }
-      }
-    });
-  }
+  setupThemeToggle();
+  setupBackToTopButton();
 
   // route on hashchange
   window.addEventListener('hashchange', () => loadTool(location.hash.slice(1)));
