@@ -32,6 +32,23 @@ async function loadToolsList() {
   }
 }
 
+const CATEGORY_ICONS = {
+    "Games": "fa-solid fa-gamepad",
+    "Calculators": "fa-solid fa-calculator",
+    "Health & Fitness": "fa-solid fa-heart-pulse",
+    "Forms & UI": "fa-solid fa-object-group",
+    "Generators": "fa-solid fa-wand-magic-sparkles",
+    "System & Hardware": "fa-solid fa-microchip",
+    "Data & API": "fa-solid fa-database",
+    "Productivity & Organization": "fa-solid fa-list-check",
+    "Finance & Calculators": "fa-solid fa-sack-dollar",
+    "Text & Content": "fa-solid fa-file-alt",
+    "Fun & Creative": "fa-solid fa-lightbulb",
+    "Developer Tools": "fa-solid fa-code",
+    "Utilities": "fa-solid fa-screwdriver-wrench",
+    "Uncategorized": "fa-solid fa-shapes"
+};
+
 /* build nav and home/sidebar */
 function buildCategorizedView(toolList, parentId) {
     const parentEl = document.getElementById(parentId);
@@ -69,17 +86,19 @@ function buildCategorizedView(toolList, parentId) {
         }).join('');
     } else { // Home Page Card View
         parentEl.innerHTML = sortedCategories.map(category => {
+            const iconClass = CATEGORY_ICONS[category] || 'fa-solid fa-star';
             const cardsHtml = groupedTools[category].map(t => `
-                <div class="col-md-3 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body mytool">
-                            <h5 class="card-title">${t.name}</h5>
-                            <p class="card-text small">${t.description || ''}</p>
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 home-tool-card">
+                        <div class="card-body mytool d-flex flex-column">
+                            <h5 class="card-title mb-2">${t.name}</h5>
+                            <p class="card-text small flex-grow-1">${t.description || ''}</p>
+                            <div class="card-icon-bottom"><i class="fa-solid fa-arrow-right"></i></div>
                             <a class="stretched-link" href="#${t.id}"></a>
                         </div>
                     </div>
                 </div>`).join('');
-            return `<div class="row mb-4"><div class="col-12"><h4>${category}</h4><hr></div>${cardsHtml}</div>`;
+            return `<div class="row mb-4"><div class="col-12"><h4 class="category-header"><i class="${iconClass} me-2"></i>${category}</h4></div>${cardsHtml}</div>`;
         }).join('');
     }
 }
