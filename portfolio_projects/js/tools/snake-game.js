@@ -208,6 +208,16 @@ function changeDirection(event) {
     }
 }
 
+/**
+ * Handles clicks from the on-screen mobile controls.
+ */
+function handleMobileControls(event) {
+    const direction = event.currentTarget.dataset.direction;
+    if (direction) {
+        changeDirection({ key: direction }); // Simulate a keyboard event
+    }
+}
+
 // --- Router Hooks ---
 
 export function init() {
@@ -224,6 +234,16 @@ export function init() {
     }
     // Listen for keyboard input on the entire document
     document.addEventListener('keydown', changeDirection);
+
+    // Attach listeners for mobile controls
+    const btnUp = document.getElementById('btn-up');
+    const btnDown = document.getElementById('btn-down');
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+    if (btnUp) btnUp.addEventListener('click', () => changeDirection({ key: 'ArrowUp' }));
+    if (btnDown) btnDown.addEventListener('click', () => changeDirection({ key: 'ArrowDown' }));
+    if (btnLeft) btnLeft.addEventListener('click', () => changeDirection({ key: 'ArrowLeft' }));
+    if (btnRight) btnRight.addEventListener('click', () => changeDirection({ key: 'ArrowRight' }));
     
     // 3. Initial setup (Draw the empty grid and food placeholder)
     generateFood();
@@ -241,6 +261,16 @@ export function cleanup() {
         startBtnEl.removeEventListener('click', startGame);
     }
     document.removeEventListener('keydown', changeDirection);
+
+    // Remove mobile control listeners
+    const btnUp = document.getElementById('btn-up');
+    const btnDown = document.getElementById('btn-down');
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+    if (btnUp) btnUp.removeEventListener('click', () => changeDirection({ key: 'ArrowUp' }));
+    if (btnDown) btnDown.removeEventListener('click', () => changeDirection({ key: 'ArrowDown' }));
+    if (btnLeft) btnLeft.removeEventListener('click', () => changeDirection({ key: 'ArrowLeft' }));
+    if (btnRight) btnRight.removeEventListener('click', () => changeDirection({ key: 'ArrowRight' }));
     
     // Reset state for a clean reload
     isGameRunning = false;
