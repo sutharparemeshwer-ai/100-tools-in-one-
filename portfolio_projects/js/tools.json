@@ -315,5 +315,13 @@
   "name": "Dad Joke Generator",
   "description": "Fetches a random, cringeworthy dad joke from an API.",
   "tags": ["fun", "joke", "generator", "api", "creative"], "category": "Fun & Creative"
- }
+ },
+ {
+  "id": "this-or-that-superhero",
+  "name": "This or That: Superhero",
+  "description": "Choose between two superheroes.",
+  "category": "Games",
+  "tags": ["game", "superhero", "this or that", "would you rather"]
+}
+
 ]
