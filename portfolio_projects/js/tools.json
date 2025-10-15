@@ -330,6 +330,14 @@
     "category": "Fun & Creative",
     "tags": ["fun", "game", "random", "utility", "coin"]
 }
+,
+{
+    "id": "maze-solver",
+    "name": "Maze Solver",
+    "description": "Navigate a randomly generated maze using your keyboard.",
+    "category": "Games",
+    "tags": ["game", "puzzle", "maze", "logic", "keyboard"]
+}
 
 
 

@@ -1539,3 +1539,9 @@ a {
         padding: 0.5rem 1rem;
     }
 }
+
+/* --- Maze Solver Styles --- */
+.maze-canvas-style {
+    background-color: #f8f9fa; /* Light background for the maze paths */
+    border: 2px solid #495057;
+}
