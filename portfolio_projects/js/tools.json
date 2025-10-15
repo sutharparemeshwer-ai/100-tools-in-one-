@@ -322,6 +322,15 @@
   "description": "Choose between two superheroes.",
   "category": "Games",
   "tags": ["game", "superhero", "this or that", "would you rather"]
+},
+{
+    "id": "coin-toss-simulator",
+    "name": "Coin Toss Simulator",
+    "description": "A simple, animated coin toss simulator to make quick decisions.",
+    "category": "Fun & Creative",
+    "tags": ["fun", "game", "random", "utility", "coin"]
 }
+
+
 
 ]
