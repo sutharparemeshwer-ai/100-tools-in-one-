@@ -8,13 +8,15 @@ const KEY_MAP = {
 
 // Map notes to an arbitrary pitch multiplier for a single sound file
 // These values are calculated to create different musical steps (notes).
+// These values are based on the 12-tone equal temperament scale.
 const PITCH_MAP = {
-    'C': 1.0, 'C#': 1.06, 'D': 1.12, 'D#': 1.19, 'E': 1.26, 'F': 1.33,
-    'F#': 1.41, 'G': 1.5, 'G#': 1.59, 'A': 1.68, 'A#': 1.78, 'B': 1.89
+    'C': 1.0, 'C#': 1.059, 'D': 1.122, 'D#': 1.189, 'E': 1.260, 'F': 1.335,
+    'F#': 1.414, 'G': 1.498, 'G#': 1.587, 'A': 1.682, 'A#': 1.782, 'B': 1.888
 };
 
 // DOM Elements
-let audioEl, allKeys;
+let allKeys;
+let baseAudioSrc; // We'll store the source path
 
 // --- Core Logic ---
 
@@ -22,28 +24,26 @@ let audioEl, allKeys;
  * Plays the note and updates the key visual.
  */
 function playNote(note, keyElement) {
-    if (!audioEl) return;
+    if (!baseAudioSrc) return;
 
-    // 1. Set the playback rate (PITCH) based on the note map
-    audioEl.playbackRate = PITCH_MAP[note] || 1.0; 
-    
-    // 2. Play the sound
-    audioEl.currentTime = 0; // Reset to start for immediate play
-    audioEl.play().catch(e => console.warn("Audio playback failed (usually harmless):", e));
+    // 1. Create a new Audio object for each note play
+    const audio = new Audio(baseAudioSrc);
 
-    // 3. Stop the audio after 400ms (0.4 seconds)
-    setTimeout(() => {
-        if (!audioEl.paused) {
-            audioEl.pause();
-        }
-    }, 400); // 400 milliseconds = 0.4 seconds
+    // 2. Set the playback rate (PITCH) based on the note map
+    audio.playbackRate = PITCH_MAP[note] || 1.0;
 
-    // 4. Set Active State (Visual Feedback)
+    // 3. Play the sound
+    audio.play().catch(e => console.warn("Audio playback failed (usually harmless):", e));
+
+    // The audio will play to its natural end. If you want to cut it short,
+    // you could add a timeout to pause it, but it's often not necessary.
+
+    // 4. Set Active State for Visual Feedback
     if (keyElement) {
         keyElement.classList.add('active');
         setTimeout(() => {
             keyElement.classList.remove('active');
-        }, 100);
+        }, 150);
     }
 }
 
@@ -86,8 +86,12 @@ function handleKeyUp(e) {
 
 export function init() {
     // 1. Get DOM elements
-    audioEl = document.getElementById('piano-sound');
+    const audioEl = document.getElementById('piano-sound');
     allKeys = document.querySelectorAll('.key');
+
+    if (audioEl) {
+        baseAudioSrc = audioEl.src;
+    }
 
     // 2. Attach listeners for mouse clicks
     allKeys.forEach(key => {
