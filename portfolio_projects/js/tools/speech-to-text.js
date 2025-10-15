@@ -75,16 +75,12 @@ function initializeRecognition() {
     };
 
     recognition.onend = function() {
-        if (isListening) {
-             // If continuous is true, the API should automatically restart, but we ensure it here.
-             // Some browsers require a manual restart on 'end' event.
-             recognition.start();
-        } else {
-             // If we intentionally stopped it, update the UI
-             statusMessageEl.textContent = 'Stopped. Click start to resume.';
-             statusMessageEl.classList.remove('text-success', 'fw-bold', 'text-danger');
-             statusMessageEl.classList.add('text-muted');
-        }
+        // This event fires when recognition stops, either manually or due to an error/timeout.
+        // We just need to ensure the UI is reset to the "stopped" state.
+        isListening = false;
+        startBtnEl.classList.remove('listening', 'd-none');
+        stopBtnEl.classList.add('d-none');
+        statusMessageEl.textContent = 'Stopped. Click "Start Listening" to begin again.';
     };
 }
 
@@ -104,6 +100,7 @@ function startListening() {
  * Stops the speech recognition process.
  */
 function stopListening() {
+    // This will trigger the 'onend' event handler.
     if (recognition && isListening) {
         isListening = false;
         recognition.stop();

@@ -57,6 +57,11 @@ function startGame() {
     statusDisplay.classList.remove('game-over-text', 'text-danger');
     statusDisplay.classList.add('text-success');
 
+    // Update mobile button text
+    if (jumpBtn) {
+        jumpBtn.innerHTML = '<i class="fa-solid fa-up-long"></i> JUMP';
+    }
+
     // Clear previous intervals if any
     clearInterval(scoreInterval);
     clearInterval(gameInterval);
@@ -105,6 +110,11 @@ function gameOver() {
     statusDisplay.textContent = `GAME OVER! Press ENTER to restart. Final Score: ${score}`;
     statusDisplay.classList.remove('text-success');
     statusDisplay.classList.add('game-over-text', 'text-danger');
+
+    // Update mobile button text
+    if (jumpBtn) {
+        jumpBtn.textContent = 'Restart Game';
+    }
 }
 
 // --- Event Handlers ---
@@ -125,7 +135,11 @@ function handleKeydown(e) {
 }
 
 function handleJumpClick() {
-    jump();
+    if (isGameOver) {
+        startGame();
+    } else {
+        jump();
+    }
 }
 
 
@@ -148,6 +162,9 @@ export function init() {
     isGameOver = true; 
     statusDisplay.textContent = 'Press ENTER to Start! SPACE to Jump.';
     groundEl.style.animationPlayState = 'paused'; 
+    if (jumpBtn) {
+        jumpBtn.textContent = 'Start Game';
+    }
     obstacleEl.style.display = 'none'; // Initial state hidden
 }
 

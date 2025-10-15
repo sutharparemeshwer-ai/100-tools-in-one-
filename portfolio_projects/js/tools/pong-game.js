@@ -59,13 +59,15 @@ const resetBall = () => {
 };
 
 const movePaddles = () => {
-    // Player 1 (W, S)
-    if (keysPressed['w'] && paddle1Y > 0) {
-        paddle1Y -= PADDLE_SPEED;
+    // Player 1 (Left Paddle) becomes a simple AI
+    const paddle1Center = paddle1Y + PADDLE_HEIGHT / 2;
+    if (paddle1Center < ballY - 35 && paddle1Y < canvas.height - PADDLE_HEIGHT) {
+        paddle1Y += PADDLE_SPEED * 0.85; // AI is slightly slower
     }
-    if (keysPressed['s'] && paddle1Y < canvas.height - PADDLE_HEIGHT) {
-        paddle1Y += PADDLE_SPEED;
+    if (paddle1Center > ballY + 35 && paddle1Y > 0) {
+        paddle1Y -= PADDLE_SPEED * 0.85;
     }
+
     // Player 2 (ArrowUp, ArrowDown)
     if (keysPressed['ArrowUp'] && paddle2Y > 0) {
         paddle2Y -= PADDLE_SPEED;
@@ -146,6 +148,26 @@ const handleKeyUp = (e) => {
     keysPressed[e.key] = false;
 };
 
+let touchIntervalUp = null;
+let touchIntervalDown = null;
+
+const startMoving = (direction) => {
+    stopMoving(); // Clear any existing interval
+    const move = () => {
+        keysPressed[direction] = true;
+        setTimeout(() => keysPressed[direction] = false, 50); // Simulate a key press
+    };
+    move(); // Initial move
+    return setInterval(move, 50);
+};
+
+const stopMoving = () => {
+    clearInterval(touchIntervalUp);
+    clearInterval(touchIntervalDown);
+    touchIntervalUp = null;
+    touchIntervalDown = null;
+};
+
 // --- Router Hooks ---
 export function init() {
     // Get DOM elements
@@ -163,6 +185,18 @@ export function init() {
     startBtn.addEventListener('click', startGame);
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
+
+    // Mobile touch controls
+    const btnUp = document.getElementById('pong-btn-up');
+    const btnDown = document.getElementById('pong-btn-down');
+    if (btnUp) {
+        btnUp.addEventListener('touchstart', () => touchIntervalUp = startMoving('ArrowUp'));
+        btnUp.addEventListener('touchend', stopMoving);
+    }
+    if (btnDown) {
+        btnDown.addEventListener('touchstart', () => touchIntervalDown = startMoving('ArrowDown'));
+        btnDown.addEventListener('touchend', stopMoving);
+    }
 }
 
 export function cleanup() {
@@ -172,4 +206,17 @@ export function cleanup() {
     document.removeEventListener('keydown', handleKeyDown);
     document.removeEventListener('keyup', handleKeyUp);
     startBtn.removeEventListener('click', startGame);
+
+    // Mobile touch controls cleanup
+    const btnUp = document.getElementById('pong-btn-up');
+    const btnDown = document.getElementById('pong-btn-down');
+    if (btnUp) {
+        btnUp.removeEventListener('touchstart', () => touchIntervalUp = startMoving('ArrowUp'));
+        btnUp.removeEventListener('touchend', stopMoving);
+    }
+    if (btnDown) {
+        btnDown.removeEventListener('touchstart', () => touchIntervalDown = startMoving('ArrowDown'));
+        btnDown.removeEventListener('touchend', stopMoving);
+    }
+    stopMoving(); // Ensure intervals are cleared
 }
