@@ -396,6 +396,40 @@ window.addEventListener('DOMContentLoaded', async () => {
   // initial route
   loadTool(location.hash.slice(1));
 });
+/**
+ * Builds the grid for the "All Tools" page.
+ * @param {Array} toolList - The list of tools to display.
+ */
+function buildAllToolsGrid(toolList) {
+    const grid = document.getElementById('all-tools-grid');
+    const noResultsEl = document.getElementById('no-tools-found');
+    if (!grid || !noResultsEl) return;
+
+    grid.innerHTML = ''; // Clear previous results
+
+    if (toolList.length === 0) {
+        noResultsEl.classList.remove('d-none');
+    } else {
+        noResultsEl.classList.add('d-none');
+    }
+
+    toolList.forEach(tool => {
+        const categoryIcon = CATEGORY_ICONS[tool.category] || 'fa-solid fa-star';
+        const card = `
+            <div class="col">
+                <a href="#${tool.id}" class="card h-100 all-tools-card">
+                    <div class="card-body d-flex flex-column">
+                        <div class="tool-icon mb-3"><i class="${categoryIcon}"></i></div>
+                        <h5 class="card-title">${tool.name}</h5>
+                        <p class="card-text small flex-grow-1">${tool.description}</p>
+                        <span class="badge tool-category-badge align-self-start">${tool.category}</span>
+                    </div>
+                </a>
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', card);
+    });
+}
 
 // Hide splash screen after a delay
 window.addEventListener('load', () => {

@@ -7,6 +7,13 @@
    { "id": "battery", "name": "Battery Percentage Indicator", "description": "Indicates your battery percentage.", "tags": ["charge","battery"], "category": "System & Hardware"},
    { "id": "ttt", "name": "Tic Tac Toe", "description": "'x' and 'o' game for multiplayers", "tags": ["game","fun"], "category": "Games"},
    { "id": "Anime", "name": "anime finder", "description": "find any anime in one click", "tags": ["anime","finder"], "category": "Data & API"},
+ {
+  "id": "mood-tracker",
+  "name": "Mood Tracker",
+  "description": "Log your daily mood and view your mood history over time.",
+  "tags": ["mood", "tracker", "health", "productivity", "localstorage"],
+  "category": "Health & Fitness"
+ },
    { "id": "calculator", "name": "Simple Calculator", "description": "Perform basic arithmetic calculations.", "tags": ["math", "calculator", "utility"], "category": "Calculators" },
    { 
   "id": "notes", 
@@ -345,6 +352,13 @@
   "description": "A simple app to write and save daily journal entries using local storage.", 
   "tags": ["journal", "writing", "productivity", "localstorage"], "category": "Productivity & Organization" 
  },
+ {
+ "id": "reminder-tool",
+ "name": "Reminder Tool",
+ "description": "Set reminders that trigger browser notifications at a specified time.",
+ "tags": ["reminder", "notification", "productivity", "utility"],
+ "category": "Productivity & Organization"
+},
 {
     "id": "2048-game",
     "name": "2048 Game",
