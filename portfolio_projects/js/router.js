@@ -109,47 +109,77 @@ function buildCategorizedView(toolList, parentId) {
 }
 
 /**
- * Builds the category grid for the homepage.
+ * Builds the featured tools grid for the homepage.
  */
-function buildCategoryGrid() {
+function buildFeaturedToolsGrid() {
     const grid = document.getElementById('core-categories-grid');
     if (!grid) return;
 
-    const categories = [...new Set(toolsList.map(t => t.category || 'Uncategorized'))].sort();
-    
-    const createCard = (category) => {
-        const iconClass = CATEGORY_ICONS[category] || 'fa-solid fa-star';
-        const categoryId = `category-${category.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
-        return `
-            <div class="col">
-                <a href="#${categoryId}" class="core-tool-card h-100">${category}</a>
-            </div>`;
-    };
+    // Group tools by category
+    const groupedTools = toolsList.reduce((acc, tool) => {
+        const category = tool.category || 'Uncategorized';
+        if (!acc[category]) {
+            acc[category] = [];
+        }
+        acc[category].push(tool);
+        return acc;
+    }, {});
 
-    grid.innerHTML = categories.map(createCard).join('');
+    // Sort categories alphabetically
+    const sortedCategories = Object.keys(groupedTools).sort();
+
+    // Generate HTML
+    grid.innerHTML = sortedCategories.map((category, index) => {
+        const iconClass = CATEGORY_ICONS[category] || 'fa-solid fa-star';
+        const cardsHtml = groupedTools[category].map(t => `
+          
+            <div class="col-auto mb-3">
+                <a href="#${t.id}" class="btn tool-name-btn">${t.name}</a>
+            </div>`).join('');
+        const marginClass = index > 0 ? 'mt-4' : ''; // Add margin to all but the first category
+        
+        return `
+            <div class="category-block py-3 ${marginClass}">
+                <div class="row mb-4"><div class="col-12 text-center"><h3 class="category-header"><i class="${iconClass} me-2"></i>${category}</h3></div></div><div class="row g-2 justify-content-center">${cardsHtml}</div>
+                
+            </div>`;
+    }).join('');
 }
 
 /**
- * Adds smooth scrolling to the category slider links and prevents router interference.
+ * Handles clicks within the featured tools grid.
  */
-function setupCategorySliderLinks() {
+function setupFeaturedToolsGridLinks() {
     const grid = document.getElementById('core-categories-grid');
     if (!grid) return;
 
     grid.addEventListener('click', (e) => {
         const link = e.target.closest('a.core-tool-card');
         if (!link) return;
-
-        e.preventDefault(); // Stop the browser from changing the hash immediately
-
-        const targetId = link.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-
-        if (targetElement) {
-            // Manually scroll to the element smoothly
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        
+        // The default behavior of clicking a link (e.g., <a href="#code-editor">)
+        // is to change the hash, which is exactly what our router needs.
+        // So, we don't need to preventDefault() or add any special logic here.
+        // The hashchange event listener will handle the navigation.
     });
+}
+
+/**
+ * Sets up the hero section's "Explore Now" button to scroll smoothly.
+ */
+function setupHeroButton() {
+    const exploreBtn = document.getElementById('hero-explore-btn');
+    const targetSection = document.getElementById('explore-tools-section');
+
+    if (exploreBtn && targetSection) {
+        exploreBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
 }
 
 /* build nav and home/sidebar */
@@ -174,17 +204,17 @@ async function loadTool(name) {
       <div class="hero-section">
         <div class="hero-content">
           <h1 class="hero-title">A Suite of Powerful Web Tools</h1>
-          <p class="hero-subtitle">Discover ${toolsList.length} meticulously crafted utilities, games, and generators, all in one place.</p>
-          <a href="#all-tools" class="btn hero-cta-btn">Explore Now</a>
+          <p class="hero-subtitle">Discover ${toolsList.length} meticulously crafted utilities, games, and generators, all in one place.</p> 
+          <a href="#" id="hero-explore-btn" class="btn hero-cta-btn">Explore Now</a>
         </div>
         <div class="hero-background-animation"></div>
       </div>
 
       <!-- "Our Core Tools" Section -->
-      <div class="core-tools-container">
+      <div class="core-tools-container" id="explore-tools-section">
         <div class="container">
-            <h1 class="text-center mb-5">Explore by Category</h1>
-            <div id="core-categories-grid" class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center"></div>
+            <h1 class="text-center mb-5">Explore Our Tools</h1>
+            <div id="core-categories-grid"></div>
         </div>
       </div>
 
@@ -218,15 +248,16 @@ async function loadTool(name) {
       <!-- End "We deal with" Section -->
       
       <div class="container mt-5">
-        <div id="home-list" class="row">
+        <div id="home-list" class="row" style="display: none;">
         
         </div>
       </div>
       <br>
     `;
     buildNavAndHome();
-    buildCategoryGrid();
-    setupCategorySliderLinks();
+    buildFeaturedToolsGrid();
+    setupFeaturedToolsGridLinks();
+    setupHeroButton();
     return;
   }
 

@@ -339,6 +339,12 @@
     "tags": ["game", "puzzle", "maze", "logic", "keyboard"]
 }
 ,
+{ 
+  "id": "daily-journal", 
+  "name": "Daily Journal", 
+  "description": "A simple app to write and save daily journal entries using local storage.", 
+  "tags": ["journal", "writing", "productivity", "localstorage"], "category": "Productivity & Organization" 
+ },
 {
     "id": "2048-game",
     "name": "2048 Game",
