@@ -165,6 +165,37 @@ function setupFeaturedToolsGridLinks() {
 }
 
 /**
+ * Builds the grid for the "Recently Added" section on the homepage.
+ */
+function buildRecentlyAddedGrid() {
+    const grid = document.getElementById('recently-added-grid');
+    if (!grid) return;
+
+    // Get the last 8 tools added to the JSON file, and reverse to show newest first.
+    const recentTools = toolsList.slice(-8).reverse();
+
+    grid.innerHTML = ''; // Clear previous content
+
+    recentTools.forEach(tool => {
+        const categoryIcon = CATEGORY_ICONS[tool.category] || 'fa-solid fa-star';
+        // Re-use the card style from the "All Tools" page for consistency
+        const card = `
+            <div class="col">
+                <a href="#${tool.id}" class="card h-100 all-tools-card">
+                    <div class="card-body d-flex flex-column">
+                        <div class="tool-icon mb-3"><i class="${categoryIcon}"></i></div>
+                        <h5 class="card-title">${tool.name}</h5>
+                        <p class="card-text small flex-grow-1">${tool.description}</p>
+                        <span class="badge tool-category-badge align-self-start">${tool.category}</span>
+                    </div>
+                </a>
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', card);
+    });
+}
+
+/**
  * Sets up the hero section's "Explore Now" button to scroll smoothly.
  */
 function setupHeroButton() {
@@ -218,6 +249,15 @@ async function loadTool(name) {
         </div>
       </div>
 
+      <!-- "Recently Added" Section -->
+      <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Recently Added</h2>
+        </div>
+        <div id="recently-added-grid" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        </div>
+      </div>
+
       <!-- "We deal with" Section -->
       <div class="tool-slider-container-fluid">
           <h1 class="text-center mb-5">We deal with</h1>
@@ -257,6 +297,7 @@ async function loadTool(name) {
     buildNavAndHome();
     buildFeaturedToolsGrid();
     setupFeaturedToolsGridLinks();
+    buildRecentlyAddedGrid();
     setupHeroButton();
     return;
   }
@@ -265,10 +306,10 @@ async function loadTool(name) {
   if (name === 'all-tools') {
       try {
           const res = await fetch(`${TOOLS_HTML_PATH}/all-tools.html`);
+          const urlParams = new URLSearchParams(window.location.search);
           if (!res.ok) throw new Error('all-tools.html not found');
           app.innerHTML = await res.text();
-          buildAllToolsGrid(toolsList); // Populate the grid
-          setupAllToolsSearch(); // Activate the search bar
+          setupAllToolsSearch(urlParams.get('q')); // Activate search, passing any query
       } catch (err) {
           console.error('Error loading all-tools page:', err);
           app.innerHTML = `<div class="alert alert-danger">Could not load the tool suite page.</div>`;
@@ -306,20 +347,71 @@ async function loadTool(name) {
 /* search helper: simple text match on name + description + tags */
 function setupSearch() {
   const input = document.getElementById('tool-search');
-  if (!input) return;
-  input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-    
-    // Filter the tools list
-    const filtered = toolsList.filter(t =>
-      t.name.toLowerCase().includes(q) ||
-      (t.description && t.description.toLowerCase().includes(q)) ||
-      (t.tags && t.tags.join(' ').toLowerCase().includes(q))
-    );
-    
-    // Re-build the categorized views with the filtered list
-    buildCategorizedView(filtered, 'home-list'); // Only need to update the home list now
-  });
+    const form = input ? input.closest('form') : null;
+    if (!input || !form) return;
+
+    // Create and inject the dropdown element
+    const dropdown = document.createElement('div');
+    dropdown.className = 'search-results-dropdown';
+    form.style.position = 'relative'; // Needed for absolute positioning of dropdown
+    form.appendChild(dropdown);
+
+    const renderDropdown = (results) => {
+        if (results.length === 0) {
+            dropdown.style.display = 'none';
+            return;
+        }
+        dropdown.innerHTML = results.slice(0, 7).map(tool => {
+            const categoryIcon = CATEGORY_ICONS[tool.category] || 'fa-solid fa-star';
+            return `
+                <a href="#${tool.id}" class="search-result-item">
+                    <i class="search-result-icon ${categoryIcon}"></i>
+                    <div class="search-result-text">
+                        <strong class="search-result-name">${tool.name}</strong>
+                        <span class="search-result-desc">${tool.description}</span>
+                    </div>
+                </a>`;
+        }).join('');
+        dropdown.style.display = 'block';
+    };
+
+    const handleSearch = () => {
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+            dropdown.style.display = 'none';
+            return;
+        }
+        const filtered = toolsList.filter(t =>
+            t.name.toLowerCase().includes(query) ||
+            (t.description && t.description.toLowerCase().includes(query)) ||
+            (t.tags && t.tags.join(' ').toLowerCase().includes(query))
+        );
+        renderDropdown(filtered);
+    };
+
+    // Debounce function to limit how often the search runs
+    const debounce = (func, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    };
+
+    input.addEventListener('input', debounce(handleSearch, 300)); // 300ms debounce delay
+
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!form.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        window.location.hash = `#all-tools?q=${encodeURIComponent(input.value.trim())}`;
+        dropdown.style.display = 'none'; // Hide dropdown on submit
+    });
 }
 
 /* theme switcher logic */
@@ -379,6 +471,34 @@ function setupBackToTopButton() {
             behavior: 'smooth' // Smooth scrolling animation
         });
     });
+}
+
+/**
+ * Sets up the search functionality for the "All Tools" page.
+ * @param {string|null} initialQuery - An initial search query from URL params.
+ */
+function setupAllToolsSearch(initialQuery = null) {
+    const searchInput = document.getElementById('all-tools-search-input');
+    if (!searchInput) return;
+
+    const filterAndRender = (query) => {
+        const normalizedQuery = query.trim().toLowerCase();
+        const filteredTools = toolsList.filter(t =>
+            t.name.toLowerCase().includes(normalizedQuery) ||
+            (t.description && t.description.toLowerCase().includes(normalizedQuery)) ||
+            (t.tags && t.tags.join(' ').toLowerCase().includes(normalizedQuery))
+        );
+        buildAllToolsGrid(filteredTools);
+    };
+
+    if (initialQuery) {
+        searchInput.value = initialQuery;
+        filterAndRender(initialQuery);
+    } else {
+        buildAllToolsGrid(toolsList); // Show all tools if no query
+    }
+
+    searchInput.addEventListener('input', () => filterAndRender(searchInput.value));
 }
 
 /* start the app */

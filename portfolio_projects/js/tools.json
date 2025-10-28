@@ -1,5 +1,19 @@
 [
   { "id": "bmi", "name": "BMI Calculator", "description": "Calculate body-mass index",  "tags": ["health","calculator"], "category": "Health & Fitness" },
+  {
+    "id": "gpa-calculator",
+    "name": "GPA / Grade Calculator",
+    "description": "Calculate your Grade Point Average (GPA) based on course credits and grades.",
+    "tags": ["gpa", "grade", "calculator", "student", "study"],
+    "category": "Calculators"
+  },
+  {
+    "id": "calorie-counter",
+    "name": "Calorie Counter",
+    "description": "Track your daily calorie intake by logging food items. Data is saved locally for the day.",
+    "tags": ["calories", "diet", "health", "tracker", "fitness"],
+    "category": "Health & Fitness"
+  },
    { "id": "age", "name": "Age Calculator", "description": "Find your exact age in years, months, and days", "tags": ["date","calculator"], "category": "Calculators" },
    { "id": "contact", "name": "Contact Form", "description": "A simple contact form with validation", "tags": ["form","contact"], "category": "Forms & UI" },
    { "id": "blackjack", "name": "Blackjack Game", "description": "Play a simple blackjack card game", "tags": ["game","cards"], "category": "Games" },
@@ -70,6 +84,41 @@
  {"id": "qr-generator","name": "QR Code Generator","description": "Generate QR codes for any text or link","tags": ["qr", "utility", "generator"], "category": "Generators"},
  {"id": "image-cropper","name": "Image Cropper","description": "Crop, zoom, and download images easily","tags": ["image", "editor", "utility"], "category": "Fun & Creative"},
  {"id": "video-dow","name": "video downloader","description": "Download any video from its URL easily and safely.","tags": ["video", "download", "social"], "category": "Utilities"},
+ {
+  "id": "qr-scanner",
+  "name": "QR Code Scanner",
+  "description": "Scan QR codes in real-time using your device's camera.",
+  "tags": ["qr", "scanner", "camera", "utility"],
+  "category": "Utilities"
+ },
+ {
+  "id": "file-compressor",
+  "name": "File Compressor (ZIP)",
+  "description": "Compress multiple files into a ZIP archive and decompress ZIP files, all within your browser.",
+  "tags": ["zip", "unzip", "compress", "decompress", "file", "utility"],
+  "category": "Utilities"
+ },
+ {
+  "id": "dictionary-thesaurus",
+  "name": "Dictionary + Thesaurus",
+  "description": "Look up word definitions, phonetics, and synonyms using a free dictionary API.",
+  "tags": ["dictionary", "thesaurus", "words", "api", "language"],
+  "category": "Text & Content"
+ },
+ {
+  "id": "image-compressor",
+  "name": "Image Compressor / Resizer",
+  "description": "Compress and resize images directly in your browser to reduce file size.",
+  "tags": ["image", "compressor", "resizer", "optimizer", "utility"],
+  "category": "Fun & Creative"
+ },
+ {
+  "id": "image-filters",
+  "name": "Image Filters",
+  "description": "Apply various CSS-like filters to your images and download the result.",
+  "tags": ["image", "filters", "css", "editor", "fun", "creative"],
+  "category": "Fun & Creative"
+ },
 
  {
   "id": "virtual-card",
@@ -166,6 +215,20 @@
   "name": "Pong Game",
   "description": "A classic two-player Pong game controlled by the keyboard.",
   "tags": ["game", "classic", "fun", "multiplayer"], "category": "Games"
+ },
+ {
+  "id": "calendar-with-events",
+  "name": "Calendar with Events",
+  "description": "A dynamic calendar to add, view, and manage events for any date. Events are saved in local storage.",
+  "tags": ["calendar", "events", "scheduler", "productivity", "localstorage"],
+  "category": "Productivity & Organization"
+ },
+ {
+  "id": "file-organizer",
+  "name": "File Organizer",
+  "description": "A client-side file manager to organize virtual files and folders. Data is saved in local storage.",
+  "tags": ["file", "organizer", "manager", "localstorage", "drag-and-drop"],
+  "category": "Productivity & Organization"
  },
  {
   "id": "interactive-flashcard-app",
@@ -358,6 +421,13 @@
  "description": "Set reminders that trigger browser notifications at a specified time.",
  "tags": ["reminder", "notification", "productivity", "utility"],
  "category": "Productivity & Organization"
+},
+{
+  "id": "study-helper",
+  "name": "Study Helper",
+  "description": "A focused study session tool with an integrated Pomodoro timer and a session-specific task list.",
+  "tags": ["study", "pomodoro", "timer", "tasks", "productivity", "focus"],
+  "category": "Productivity & Organization"
 },
 {
     "id": "2048-game",

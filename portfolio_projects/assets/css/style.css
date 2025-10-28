@@ -137,38 +137,62 @@ body.light-theme .btn:hover {
 /* --- Search Dropdown Styles --- */
 .search-results-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 5px); /* Add a small gap below the search bar */
     left: 0;
     right: 0;
     z-index: 1055; /* Above navbar content */
     background-color: var(--card-bg-color);
     border: 1px solid var(--border-color);
-    border-top: none;
-    border-radius: 0 0 0.5rem 0.5rem;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem; /* Rounded corners on all sides */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Softer, larger shadow */
     max-height: 400px;
     overflow-y: auto;
     display: none; /* Hidden by default */
 }
 
 .search-result-item {
-    display: block;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center;
     padding: 0.75rem 1.25rem;
-    color: var(--text-muted-color);
     text-decoration: none;
     border-bottom: 1px solid var(--border-color);
     transition: background-color 0.2s ease;
 }
 
+.search-result-item:first-child {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
 .search-result-item:last-child {
     border-bottom: none;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 .search-result-item:hover {
     background-color: var(--primary-accent-glow);
-    color: var(--text-color);
 }
 
+.search-result-icon {
+    font-size: 1.5rem;
+    color: var(--primary-accent);
+    margin-right: 1rem;
+    width: 24px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.search-result-name {
+    color: var(--text-color);
+    font-weight: 600;
+    display: block; /* Ensure it takes its own line */
+}
+
+.search-result-desc {
+    color: var(--text-muted-color);
+    font-size: 0.85rem;
+    display: block;
+}
 /* --- New Sidebar/List Styling --- */
 
 /* Base style for all tool list items (both desktop and mobile offcanvas) */
@@ -2293,6 +2317,200 @@ body.light-theme .tool-card i {
     color: #2d6a4f; /* A darker green for the icon */
 }
 
+/* --- Calendar with Events Tool --- */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day, .weekday-label {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    position: relative;
+}
+
+.weekday-label {
+    font-weight: bold;
+    cursor: default;
+    color: var(--text-muted-color);
+}
+
+.calendar-day:not(.empty):hover {
+    background-color: var(--primary-accent-glow);
+    transform: scale(1.1);
+}
+
+.calendar-day.today {
+    border: 2px solid var(--primary-accent);
+}
+
+.calendar-day.selected {
+    background-color: var(--primary-accent);
+    color: var(--bg-color);
+    font-weight: bold;
+    transform: scale(1.05);
+}
+
+.calendar-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--primary-accent);
+}
+
+.calendar-day.selected.has-event::after {
+    background-color: var(--bg-color);
+}
+
+.events-container {
+    height: 100%;
+}
+
+.events-list .list-group-item {
+    background-color: var(--card-bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.delete-event-btn {
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.events-list .list-group-item:hover .delete-event-btn {
+    opacity: 1;
+}
+
+/* --- File Organizer Tool --- */
+.file-item[data-type="file"] {
+    cursor: pointer;
+}
+
+/* --- File Organizer Tool --- */
+.file-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.file-item:hover {
+    background-color: var(--primary-accent-glow);
+}
+
+.file-item i {
+    color: var(--primary-accent);
+}
+
+.folder-tree-item {
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.folder-tree-item:hover {
+    background-color: var(--primary-accent-glow);
+}
+
+.breadcrumb.bg-transparent {
+    background-color: transparent !important;
+}
+
+#context-menu {
+    position: absolute;
+    z-index: 1050;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+}
+
+#context-menu .dropdown-item {
+    color: var(--text-color);
+}
+#context-menu .dropdown-item:hover {
+    background-color: var(--primary-accent-glow);
+}
+
+/* --- Dictionary Tool Styles --- */
+.dict-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.dict-phonetic {
+    color: var(--text-muted-color);
+    font-size: 1.2rem;
+}
+
+.dict-meaning-section .part-of-speech {
+    font-style: italic;
+    color: var(--primary-accent);
+    position: relative;
+    display: inline-block;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dict-meaning-section .part-of-speech::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--border-color);
+    margin-left: 1rem;
+}
+
+.definitions-list {
+    list-style-type: '✓';
+    padding-left: 1.5rem;
+}
+
+.definitions-list li {
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.definitions-list li::marker {
+    color: var(--primary-accent);
+}
+
+.definitions-list .example {
+    color: var(--text-muted-color);
+    border-left: 3px solid var(--border-color);
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+.related-words-section {
+    margin-top: 1rem;
+}
+
+.synonym-badge {
+    display: inline-block;
+    background-color: var(--primary-accent-glow);
+    color: var(--primary-accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    margin: 0.25rem;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.synonym-badge:hover {
+    background-color: var(--primary-accent);
+    color: var(--bg-color);
+}
 
 
 
